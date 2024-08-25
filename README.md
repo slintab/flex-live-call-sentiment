@@ -1,9 +1,10 @@
-# Twilio Flex - Live call sentiment
+# Twilio Flex: Live call sentiment
 
 This repository contains the code for a Twilio Flex plugin for displaying a real-time call sentiment indicator for supervisors in the Flex UI.
 
 
 ## Table of contents
+
 * [Demo](#demo)
 * [Components](#components)
 * [Setup](#setup)
@@ -11,10 +12,14 @@ This repository contains the code for a Twilio Flex plugin for displaying a real
 
 
 ## Demo
+
+The sentiment indicator is displayed to the right of the [TaskCard](https://assets.flex.twilio.com/docs/releases/flex-ui/2.8.3/programmable-components/components/Supervisor%E2%80%A4TaskCard/) component for each Voice task. Green, yellow and red is used to indicate positive,neutral and negative sentiment, respectively. The below screenshot shows a voice task with positive sentiment:
+
 ![Demo](demo.png?raw=true)
 
 
 ## Components
+
 The solution consists of the following building blocks:
 - **Twilio Flex plugin *(live-sentiment-plugin)***: for streaming call audio and displaying the live sentiment indicator for supervisors in the Flex Teams View.
 - **Cloudflare worker *(live-sentiment-worker)***: used as the destination for call streams. The worker forwards the audio to [Deepgram](https://deepgram.com) for transcription and uses [Workers AI](https://developers.cloudflare.com/workers-ai/) for detecting sentiment from the transcript. Finally, it publishes the result to a Twilio Sync stream.
@@ -24,6 +29,7 @@ The solution consists of the following building blocks:
 
 
 ## Setup
+
 1. **Create Sync service:** 
    1. This can be done using the Twilio Console, under *Sync > Services > Create new Sync service*.
 2. **Deploy Twilio functions:**
@@ -59,5 +65,6 @@ The solution consists of the following building blocks:
 
 
 ## Maintainer
+
 Thanks for reading this far!
 If you have any questions, do not hesitate to reach out at `hello@slintab.dev`
