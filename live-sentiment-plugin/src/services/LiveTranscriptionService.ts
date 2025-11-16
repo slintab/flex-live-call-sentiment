@@ -12,15 +12,10 @@ class LiveTranscriptionService {
     this.manager = Flex.Manager.getInstance();
   }
 
-  async startTranscription(
-    callSid: string,
-    conferenceSid: string,
-    taskSid: string
-  ) {
+  async startTranscription(callSid: string, taskSid: string) {
     const url = this.url + "/start";
     const payload = {
       callSid,
-      conferenceSid,
       taskSid,
       Token: this.manager.store.getState().flex.session.ssoTokenPayload.token,
     };

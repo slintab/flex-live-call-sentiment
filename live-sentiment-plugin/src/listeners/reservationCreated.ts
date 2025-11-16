@@ -18,14 +18,12 @@ export default (reservation: Reservation) => {
       return;
     }
     const customerCallSid = attributes.conference?.participants?.customer;
-    const conferenceSid = attributes.conference?.sid;
 
-    if (!(customerCallSid && conferenceSid)) {
+    if (!customerCallSid) {
       return;
     }
     const result = await LiveTranscriptionService.startTranscription(
       customerCallSid,
-      conferenceSid,
       sid
     );
 

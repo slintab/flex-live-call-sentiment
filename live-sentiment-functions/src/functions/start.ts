@@ -25,35 +25,14 @@ type MyContext = {
   getTwilioClient?: () => ITwilio;
 };
 
-async function updateParticipant(
-  client: ITwilio,
-  conferenceSid: string,
-  callSid: string
-) {
-  await client
-    .conferences(conferenceSid)
-    .participants(callSid)
-    .update({ endConferenceOnExit: false });
-}
-
 async function startCallStream(
   client: ITwilio,
   callSid: string,
   taskSid: string,
   url: string
 ) {
-  const twiml = new Twiml.VoiceResponse();
-
-  const start = twiml.start();
-  start.stream({
+  await client.calls(callSid).streams.create({
     url: url + "/ws/" + taskSid,
-  });
-
-  const dial = twiml.dial();
-  dial.conference({ endConferenceOnExit: true }, taskSid);
-
-  await client.calls(callSid).update({
-    twiml: twiml.toString(),
   });
 }
 
@@ -62,10 +41,10 @@ export const handler: HandlerFn = TokenValidator(async function (
   event: MyEvent,
   callback: Callback
 ) {
-  const { callSid, conferenceSid, taskSid } = event;
+  const { callSid, taskSid } = event;
   const { STREAM_URL, getTwilioClient } = context;
 
-  if (!(callSid && conferenceSid && taskSid)) {
+  if (!(callSid && taskSid)) {
     return createError(Error("Missing parameters"), 400, callback);
   }
 
@@ -75,8 +54,6 @@ export const handler: HandlerFn = TokenValidator(async function (
 
   try {
     const twilioClient = getTwilioClient();
-
-    await updateParticipant(twilioClient, conferenceSid, callSid);
     await startCallStream(twilioClient, callSid, taskSid, STREAM_URL);
 
     return createResponse({ result: true }, callback);
