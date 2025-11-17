@@ -53,7 +53,6 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> =
         identity: SYNC_TOKEN_IDENTITY,
       });
       accessToken.addGrant(syncGrant);
-      accessToken.identity = SYNC_TOKEN_IDENTITY;
 
       return createResponse({ token: accessToken.toJwt() }, callback);
     } catch (err) {
