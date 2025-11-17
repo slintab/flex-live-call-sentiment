@@ -13,12 +13,14 @@ This repository contains the code for a Twilio Flex plugin for displaying a real
 
 ## Demo
 
-The sentiment indicator is displayed to the right of the [TaskCard](https://assets.flex.twilio.com/docs/releases/flex-ui/2.8.3/programmable-components/components/Supervisor%E2%80%A4TaskCard/) component for each Voice task. Green, yellow and red is used to indicate positive,neutral and negative sentiment, respectively. The below screenshot shows a voice task with positive sentiment:
-
 ![Demo](demo.png?raw=true)
+
+The sentiment indicator is displayed to the right of the [TaskCard](https://assets.flex.twilio.com/docs/releases/flex-ui/2.8.3/programmable-components/components/Supervisor%E2%80%A4TaskCard/) component for each Voice task. Green, yellow and red is used to indicate positive,neutral and negative sentiment, respectively. The below screenshot shows a voice task with positive sentiment:
 
 
 ## Components
+
+![Diagram](diagram.png?raw=true)
 
 The solution consists of the following building blocks:
 - **Twilio Flex plugin *(live-sentiment-plugin)***: for streaming call audio and displaying the live sentiment indicator for supervisors in the Flex Teams View.
