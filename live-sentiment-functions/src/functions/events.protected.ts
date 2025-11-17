@@ -77,8 +77,6 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> =
       context: operatorContext,
     } = event;
 
-    console.log(event);
-
     if (!(REALTIME_INTELLIGENCE_SERVICE_SID && SYNC_SERVICE_SID)) {
       return createError(Error("Internal error"), 500, callback);
     }
@@ -96,8 +94,6 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> =
       const callSid = operatorContext[0].metadata?.conversation_source_id;
       const sentiment = operatorResults[0].result?.label;
 
-      console.log(callSid, sentiment);
-
       if (sentiment && callSid) {
         await publishSentiment(
           twilioClient,
@@ -109,7 +105,7 @@ export const handler: ServerlessFunctionSignature<MyContext, MyEvent> =
 
       return createResponse({ result: true }, callback);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return createError(Error("Internal error"), 500, callback);
     }
   };
