@@ -23,11 +23,11 @@ The sentiment indicator is displayed to the right of the [TaskCard](https://asse
 ![Diagram](diagram.png?raw=true)
 
 The solution consists of the following building blocks:
-- **Twilio Flex plugin *(live-sentiment-plugin)***: for streaming call audio and displaying the live sentiment indicator for supervisors in the Flex Teams View.
-- **Cloudflare worker *(live-sentiment-worker)***: used as the destination for call streams. The worker forwards the audio to [Deepgram](https://deepgram.com) for transcription and uses [Workers AI](https://developers.cloudflare.com/workers-ai/) for detecting sentiment from the transcript. Finally, it publishes the result to a Twilio Sync stream.
-- **Twilio functions *(live-sentiment-functions)***: used as middleware for updating calls for streaming, and for obtaining the token for connecting to Twilio Sync.
+- **Twilio Flex Plugin *(live-sentiment-plugin)***: for streaming call audio and displaying the live sentiment indicator for supervisors in the Flex Teams View.
+- **Twilio Functions *(live-sentiment-functions)***: used as middleware for updating calls for streaming, and for obtaining the token for connecting to Twilio Sync.
+- **Cloudflare Workers *(live-sentiment-worker)***: used as the destination for call streams. The worker forwards the audio to [Deepgram](https://deepgram.com) for transcription and uses [Workers AI](https://developers.cloudflare.com/workers-ai/) for detecting sentiment from the transcript. Finally, it publishes the result to a Twilio Sync stream.
+- **Deepgram**: used for transcribing call audio.
 - **Twilio Sync stream**: pub/sub service for publishing and delivering the results of the sentiment analysis.
-- **Deepgram**: for transcribing call audio.
 
 
 ## Setup
