@@ -1,5 +1,5 @@
 import "@twilio-labs/serverless-runtime-types";
-import { Twilio as ITwilio, twiml as Twiml } from "twilio";
+import { Twilio as ITwilio } from "twilio";
 import {
   HandlerFn,
   Callback,

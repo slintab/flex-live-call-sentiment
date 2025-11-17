@@ -1,5 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { SyncClient } from "twilio-sync";
+import axios from "axios";
 
 const FUNCTIONS_URL = process.env.FLEX_APP_FUNCTIONS_URL;
 const SYNC_TOKEN_IDENTITY = process.env.FLEX_APP_SYNC_TOKEN_IDENTITY;
@@ -18,12 +19,11 @@ class SyncService {
   }
 
   async getToken() {
-    try {
-      const url = `${this.url}/token?identity=${this.identity}`;
-      const resp = await fetch(url);
-      const result = await resp.json();
+    const url = `${this.url}/token?identity=${this.identity}`;
 
-      return result.token;
+    try {
+      const response = await axios.get(url);
+      return response.data.token;
     } catch (e) {
       console.log(`Error making request: ${e}} `);
     }
