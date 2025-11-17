@@ -1,20 +1,20 @@
 import { styled } from "@twilio/flex-ui";
-import { SentimentResult } from "./TaskCardWrapper";
+import { Sentiment } from "./TaskCardWrapper";
 
 interface TaskCardOuterContainerProps {
-  currentSentiment: Required<SentimentResult>;
+  currentSentiment?: Sentiment;
 }
 
-const getBorderColor = ({ score, label }: { score: number; label: string }) => {
-  if (0.49 < score && score < 0.7) {
+const getBorderColor = (sentiment?: Sentiment) => {
+  if (sentiment === "mixed") {
     return "#F2BE5A";
   }
 
-  if (0.7 <= score && label === "POSITIVE") {
+  if (sentiment === "neutral" || sentiment === "positive") {
     return "#6ADDB2";
   }
 
-  if (0.7 < score && label === "NEGATIVE") {
+  if (sentiment === "negative") {
     return "#F22F46";
   }
 

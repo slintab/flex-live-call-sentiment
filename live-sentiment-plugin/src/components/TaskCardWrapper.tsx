@@ -7,26 +7,30 @@ import {
   TaskCardOuterContainer,
 } from "./TaskCardWrapper.Styles";
 
+export type Sentiment = "positive" | "negative" | "neutral" | "mixed";
+
 interface SyncStreamMessage {
   message: {
-    data: SentimentResult;
+    data: {
+      sentiment: Sentiment;
+    };
   };
-}
-
-export interface SentimentResult {
-  score?: number;
-  label?: string;
 }
 
 const addTaskCardWrapper = (flex: typeof Flex) => {
   flex.Supervisor.TaskCard.Content.addWrapper((Original) => (originalProps) => {
-    const initialSentiment = { label: "", score: -1 };
-    const [currentSentiment, setCurrentSentiment] =
-      useState<Required<SentimentResult>>(initialSentiment);
+    const [currentSentiment, setCurrentSentiment] = useState<Sentiment>();
+    const customerCallSid =
+      originalProps.task?.attributes.conference?.participants?.customer;
 
     useEffect(() => {
       async function subscribeToStream() {
-        const streamname = "FLEX_LIVE_SENTIMENT_" + originalProps.task?.taskSid;
+        if (!customerCallSid) {
+          console.error("Error fetching customer callSid.");
+          return;
+        }
+
+        const streamname = "FLEX_LIVE_SENTIMENT_" + customerCallSid;
         const syncStream = await SyncService.getStream(streamname);
 
         if (!syncStream) {
@@ -35,14 +39,14 @@ const addTaskCardWrapper = (flex: typeof Flex) => {
         }
 
         syncStream.on("messagePublished", (event: SyncStreamMessage) => {
-          const { label, score } = event.message.data;
-          console.log(score, label);
+          const { sentiment } = event.message.data;
+          console.log("Sentiment: ", sentiment);
 
-          if (!(label && score)) {
+          if (!sentiment) {
             return;
           }
 
-          setCurrentSentiment({ label, score });
+          setCurrentSentiment(sentiment);
         });
       }
 

@@ -1,33 +1,32 @@
 import * as Flex from "@twilio/flex-ui";
 import { SyncClient } from "twilio-sync";
+import axios from "axios";
 
 const FUNCTIONS_URL = process.env.FLEX_APP_FUNCTIONS_URL;
-const SYNC_TOKEN_IDENTITY = process.env.FLEX_APP_SYNC_TOKEN_IDENTITY;
 
 class SyncService {
   url: string | undefined;
-  identity: string | undefined;
   manager: Flex.Manager;
   client: SyncClient | null;
 
   constructor() {
     this.url = FUNCTIONS_URL;
-    this.identity = SYNC_TOKEN_IDENTITY;
     this.manager = Flex.Manager.getInstance();
     this.client = null;
   }
 
   async getToken() {
-    try {
-      const url = `${this.url}/token?identity=${this.identity}`;
-      const resp = await fetch(url);
-      const result = await resp.json();
+    const url = this.url + "/token";
+    const payload = {
+      Token: this.manager.store.getState().flex.session.ssoTokenPayload.token,
+    };
 
-      return result.token;
+    try {
+      const response = await axios.post(url, payload);
+      return response.data.token;
     } catch (e) {
       console.log(`Error making request: ${e}} `);
     }
-
     return false;
   }
 

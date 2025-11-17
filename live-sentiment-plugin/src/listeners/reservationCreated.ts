@@ -2,7 +2,7 @@ import LiveTranscriptionService from "../services/LiveTranscriptionService";
 
 export default (reservation: TaskRouter.Reservation) => {
   reservation.on("accepted", async (reservation) => {
-    const { taskChannelUniqueName, attributes, sid } = reservation.task;
+    const { taskChannelUniqueName, attributes } = reservation.task;
 
     if (taskChannelUniqueName !== "voice") {
       return;
@@ -13,8 +13,7 @@ export default (reservation: TaskRouter.Reservation) => {
       return;
     }
     const result = await LiveTranscriptionService.startTranscription(
-      customerCallSid,
-      sid
+      customerCallSid
     );
 
     if (!result) {

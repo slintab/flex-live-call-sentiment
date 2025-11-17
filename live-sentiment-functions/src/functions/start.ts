@@ -1,5 +1,5 @@
 import "@twilio-labs/serverless-runtime-types";
-import { Twilio as ITwilio, twiml as Twiml } from "twilio";
+import { Twilio } from "twilio";
 import {
   HandlerFn,
   Callback,
@@ -14,25 +14,23 @@ type MyEvent = {
   Token: string;
   TokenResult?: object;
   callSid?: string;
-  conferenceSid?: string;
-  taskSid?: string;
 };
 
 type MyContext = {
   ACCOUNT_SID: string;
   AUTH_TOKEN: string;
-  STREAM_URL?: string;
-  getTwilioClient?: () => ITwilio;
+  REALTIME_INTELLIGENCE_SERVICE_SID?: string;
+  getTwilioClient?: () => Twilio;
 };
 
-async function startCallStream(
-  client: ITwilio,
+async function startCallSentiment(
+  client: Twilio,
   callSid: string,
-  taskSid: string,
-  url: string
+  intelligenceServiceSid: string
 ) {
-  await client.calls(callSid).streams.create({
-    url: url + "/ws/" + taskSid,
+  await client.calls(callSid).transcriptions.create({
+    intelligenceService: intelligenceServiceSid,
+    track: "inbound_track",
   });
 }
 
@@ -41,20 +39,24 @@ export const handler: HandlerFn = TokenValidator(async function (
   event: MyEvent,
   callback: Callback
 ) {
-  const { callSid, taskSid } = event;
-  const { STREAM_URL, getTwilioClient } = context;
+  const { callSid } = event;
+  const { REALTIME_INTELLIGENCE_SERVICE_SID, getTwilioClient } = context;
 
-  if (!(callSid && taskSid)) {
+  if (!callSid) {
     return createError(Error("Missing parameters"), 400, callback);
   }
 
-  if (!(STREAM_URL && getTwilioClient)) {
+  if (!(REALTIME_INTELLIGENCE_SERVICE_SID && getTwilioClient)) {
     return createError(Error("Internal error"), 500, callback);
   }
 
   try {
     const twilioClient = getTwilioClient();
-    await startCallStream(twilioClient, callSid, taskSid, STREAM_URL);
+    await startCallSentiment(
+      twilioClient,
+      callSid,
+      REALTIME_INTELLIGENCE_SERVICE_SID
+    );
 
     return createResponse({ result: true }, callback);
   } catch (err) {
