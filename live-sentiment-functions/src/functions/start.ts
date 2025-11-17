@@ -60,6 +60,7 @@ export const handler: HandlerFn = TokenValidator(async function (
 
     return createResponse({ result: true }, callback);
   } catch (err) {
+    console.error(err);
     return createError(Error("Internal error"), 500, callback);
   }
 });

@@ -48,7 +48,7 @@ export const handler: HandlerFn = TokenValidator(async function (
 
     return createResponse({ token: accessToken.toJwt() }, callback);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return createError(Error("Internal error"), 500, callback);
   }
 });
